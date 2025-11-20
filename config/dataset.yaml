@@ -1,0 +1,119 @@
+# 数据集配置 - 支持6个数据集混合训练
+
+datasets:
+  gsm8k:
+    name: "Grade School Math 8K"
+    domain: "math"
+    source: "openai/gsm8k"
+    processed_path: "data/processed/gsm8k"
+    answer_type: "numeric"
+
+  math:
+    name: "MATH (Competition Math)"
+    domain: "math"
+    source: "hendrycks/competition_math"
+    processed_path: "data/processed/math"
+    answer_type: "text"
+
+  squad2:
+    name: "SQuAD 2.0"
+    domain: "qa"
+    source: "rajpurkar/squad_v2"
+    processed_path: "data/processed/squad2"
+    answer_type: "text"
+
+  hotpotqa:
+    name: "HotpotQA"
+    domain: "qa"
+    source: "hotpotqa/hotpot_qa"
+    processed_path: "data/processed/hotpotqa"
+    answer_type: "text"
+
+  humaneval:
+    name: "HumanEval"
+    domain: "code"
+    source: "openai/openai_humaneval"
+    processed_path: "data/processed/humaneval"
+    answer_type: "code"
+
+  mbpp:
+    name: "MBPP (Mostly Basic Python Problems)"
+    domain: "code"
+    source: "google-research-datasets/mbpp"
+    processed_path: "data/processed/mbpp"
+    answer_type: "code"
+
+# 混合训练配置
+mixed_training:
+  # 域级别比例：数学40% + QA30% + 代码30%
+  domain_weights:
+    math: 0.40
+    qa: 0.30
+    code: 0.30
+
+  # 数据集级别比例（同域内均衡）
+  dataset_weights:
+    gsm8k: 0.5    # math域内
+    math: 0.5
+    squad2: 0.5   # qa域内
+    hotpotqa: 0.5
+    humaneval: 0.5  # code域内
+    mbpp: 0.5
+
+  # 数据路径
+  train_file: "data/mixed/train.jsonl"
+  val_file: "data/mixed/val.jsonl"
+
+  # 采样配置
+  balanced_sampling: true  # 均衡采样各域
+  shuffle: true
+
+# 评估配置
+evaluation:
+  test_dir: "data/test"
+  test_datasets:
+    - "gsm8k"
+    - "math"
+    - "squad2"
+    - "hotpotqa"
+    - "humaneval"
+    - "mbpp"
+
+  # 各数据集的评估指标
+  metrics:
+    gsm8k:
+      - "accuracy"
+      - "f1"
+    math:
+      - "accuracy"
+      - "f1"
+    squad2:
+      - "exact_match"
+      - "f1"
+    hotpotqa:
+      - "exact_match"
+      - "f1"
+    humaneval:
+      - "pass@1"
+      - "pass@10"
+    mbpp:
+      - "pass@1"
+      - "pass@10"
+
+  batch_size: 8
+  num_workers: 4
+
+# 数据处理配置
+processing:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  output_dir: "data"
+
+  # 分割比例
+  train_split: 0.8
+  val_split: 0.1
+  test_split: 0.1
+
+  # 文本处理
+  max_length: 2048
+  tokenizer: "qwen"

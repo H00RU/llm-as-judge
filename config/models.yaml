@@ -1,0 +1,77 @@
+# 模型配置 - 支持Qwen2.5-7B和Qwen-3-8B
+
+models:
+  qwen25-7b:
+    name: "Qwen2.5-7B-Instruct"
+    model_id: "Qwen/Qwen2.5-7B-Instruct"
+    local_path: "./models/Qwen2.5-7B-Instruct"
+    type: "instructed"
+    size: "7B"
+    context_window: 32768
+
+    # 推理配置
+    inference:
+      max_tokens: 2048
+      temperature: 0.3
+      top_p: 0.95
+      top_k: 40
+
+    # LoRA配置
+    lora:
+      enabled: true
+      rank: 64
+      alpha: 32
+      dropout: 0.1
+      target_modules: ["q_proj", "v_proj", "up_proj", "down_proj"]
+
+    # 训练配置
+    training:
+      max_grad_norm: 1.0
+      gradient_accumulation_steps: 1
+      optim: "adamw_8bit"
+      learning_rate: 1e-4
+      warmup_steps: 100
+
+  qwen3-8b:
+    name: "Qwen-3-8B"
+    model_id: "Qwen/Qwen-3-8B"  # 可能需要替换为实际模型ID
+    local_path: "./models/Qwen-3-8B"
+    type: "instructed"
+    size: "8B"
+    context_window: 32768
+
+    # 推理配置
+    inference:
+      max_tokens: 2048
+      temperature: 0.3
+      top_p: 0.95
+      top_k: 40
+
+    # LoRA配置
+    lora:
+      enabled: true
+      rank: 64
+      alpha: 32
+      dropout: 0.1
+      target_modules: ["q_proj", "v_proj", "up_proj", "down_proj"]
+
+    # 训练配置
+    training:
+      max_grad_norm: 1.0
+      gradient_accumulation_steps: 1
+      optim: "adamw_8bit"
+      learning_rate: 1e-4
+      warmup_steps: 100
+
+# 通用配置
+default_model: "qwen25-7b"  # 当前专注的模型
+
+# 模型组合（用于对比实验）
+model_groups:
+  baseline_comparison:
+    - qwen25-7b
+    - qwen3-8b
+
+  training:
+    - qwen25-7b
+    # - qwen3-8b  # 可选：是否也训练第二个模型

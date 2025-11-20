@@ -2,6 +2,7 @@
 """
 GRPO训练器 - 在线学习模式的强化学习训练器
 """
+import os
 import torch
 import torch.nn.functional as F
 import asyncio
@@ -30,14 +31,46 @@ from operator_prompt_enhancer import OperatorPromptEnhancer
 class GRPOTrainer:
     """GRPO训练器：在线学习模式"""
 
-    def __init__(self, config_path: str = "config/training.yaml"):
+    def __init__(self, config_path: str = "config/training.yaml",
+                 model_name: Optional[str] = None,
+                 device: Optional[str] = None,
+                 output_dir: Optional[str] = None):
         """
         Args:
             config_path: 训练配置文件路径
+            model_name: 模型名称 (qwen25-7b, qwen3-8b) - 会覆盖config配置
+            device: GPU设备 (cuda:0, cuda:1等) - 会覆盖config配置
+            output_dir: 检查点输出目录 - 会覆盖config配置
         """
         # 加载配置
         with open(config_path, 'r') as f:
             self.config = yaml.safe_load(f)
+
+        # 处理模型名称覆盖
+        if model_name:
+            # 从models.yaml获取对应模型的base_model路径
+            model_mapping = {
+                "qwen25-7b": "Qwen/Qwen2.5-7B-Instruct",
+                "qwen3-8b": "Qwen/Qwen-3-8B"
+            }
+            if model_name in model_mapping:
+                self.config['base_model'] = model_mapping[model_name]
+                print(f"✅ 覆盖base_model: {self.config['base_model']}")
+
+        # 处理设备覆盖
+        if device:
+            # 从设备字符串解析GPU ID（如 cuda:0 -> [0]）
+            if device.startswith("cuda:"):
+                gpu_id = int(device.split(":")[-1])
+                self.config['device_mapping'] = [gpu_id]
+                self.config['physical_gpus'] = [gpu_id]
+                print(f"✅ 覆盖设备: {device}")
+
+        # 处理输出目录覆盖
+        if output_dir:
+            self.config['checkpointing'] = self.config.get('checkpointing', {})
+            self.config['checkpointing']['save_dir'] = output_dir
+            print(f"✅ 覆盖输出目录: {output_dir}")
 
         print("=" * 60)
         print("🚀 初始化GRPO训练器")
@@ -197,11 +230,11 @@ class GRPOTrainer:
         print("\n🎯 初始化奖励计算器...")
         self.reward_computer = RewardComputer(
             reward_weights=self.config.get('reward_weights'),
-            use_llm_judge=True,  # 启用LLM Judge (GPT OSS 120B @ port 8002)
+            use_llm_judge=True,  # 启用LLM Judge (gpt-4o)
             llm_config={
-                "base_url": "http://localhost:8002/v1",
-                "api_key": "sk-dummy",
-                "model_name": "os.getenv("GPT_OSS_MODEL_PATH", "/path/to/gpt-oss-120b")"
+                "base_url": "https://api.openai.com/v1",
+                "api_key": os.getenv("OPENAI_API_KEY"),
+                "model_name": "gpt-4o"
             }
         )
 

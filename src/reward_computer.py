@@ -63,18 +63,18 @@ class RewardComputer:
         print(f"✅ 10分制奖励计算器初始化完成")
         print(f"  模式: 正确性分数 [-10, 10] → 归一化奖励 [0, 1]")
         print(f"  答案提取器: {'启用' if use_answer_extractor else '禁用'}")
-        print(f"  LLM Judge: {'启用 (GPT OSS 120B @ port 8002)' if use_llm_judge else '禁用'}")
+        print(f"  LLM Judge: {'启用 (gpt-4o)' if use_llm_judge else '禁用'}")
 
     def _init_llm_judge_client(self, llm_config: Optional[Dict]):
-        """初始化LLM Judge客户端（使用GPT OSS 120B）"""
+        """初始化LLM Judge客户端（使用OpenAI gpt-4o）"""
         try:
             from openai import OpenAI
 
-            # 使用port 8002的GPT OSS 120B模型
+            # 使用OpenAI的gpt-4o模型
             default_config = {
-                "base_url": "http://localhost:8002/v1",
-                "api_key": "sk-dummy",  # vLLM不需要真实key
-                "model_name": "os.getenv("GPT_OSS_MODEL_PATH", "/path/to/gpt-oss-120b")"  # 完整模型路径
+                "base_url": "https://api.openai.com/v1",
+                "api_key": os.getenv("OPENAI_API_KEY", "sk-xxx"),  # 从环境变量读取OpenAI API Key
+                "model_name": "gpt-4o"  # 使用gpt-4o
             }
 
             config = llm_config or default_config

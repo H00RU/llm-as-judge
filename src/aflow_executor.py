@@ -36,7 +36,7 @@ class AFlowExecutor:
     def __init__(
         self,
         llm_config_path: str = "config/aflow_llm.yaml",
-        llm_model_name: str = "gpt-oss-120b",  # 使用8002端口的gpt-oss-120b
+        llm_model_name: str = "gpt-4o",  # 使用OpenAI官方gpt-4o
         timeout: int = 300,
         operator_enhancer: Optional[Any] = None,
         enable_fallback: bool = True  # 启用Fallback机制
@@ -81,13 +81,14 @@ class AFlowExecutor:
             # LLMsConfig期望的是models字典
             models_config = yaml_data.get('models', {})
 
-            # 为本地vLLM服务禁用代理
+            # 为本地LLM服务禁用代理（如果使用本地服务）
             import os
-            if 'localhost' in str(models_config.get('gpt-oss-120b', {}).get('base_url', '')) or \
-               '127.0.0.1' in str(models_config.get('gpt-oss-120b', {}).get('base_url', '')):
+            model_config = models_config.get(self.llm_model_name, {})
+            if 'localhost' in str(model_config.get('base_url', '')) or \
+               '127.0.0.1' in str(model_config.get('base_url', '')):
                 os.environ['NO_PROXY'] = 'localhost,127.0.0.1'
                 os.environ['no_proxy'] = 'localhost,127.0.0.1'
-                print("  📌 设置 NO_PROXY=localhost,127.0.0.1 (绕过代理访问vLLM)")
+                print("  📌 设置 NO_PROXY=localhost,127.0.0.1 (绕过代理访问本地LLM服务)")
 
             # 直接加载配置
             from scripts.async_llm import LLMsConfig
@@ -630,7 +631,7 @@ async def test_executor():
     # 创建执行器
     executor = AFlowExecutor(
         llm_config_path="config/aflow_llm.yaml",
-        llm_model_name="gpt-oss-120b",
+        llm_model_name="gpt-4o",
         timeout=60
     )
 
