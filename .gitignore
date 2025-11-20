@@ -1,0 +1,65 @@
+# Secrets and sensitive files
+.env
+*.key
+*.pem
+config/aflow_llm.yaml
+!config/aflow_llm.yaml.example
+config/training.yaml
+!config/training.yaml.example
+
+# Large data files
+*.jsonl
+!data/sample*.jsonl
+data/
+!data/.gitkeep
+checkpoints/
+models/
+!models/.gitkeep
+
+# Logs and temporary files
+logs/
+wandb/
+nohup.out
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

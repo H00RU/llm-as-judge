@@ -1,0 +1,19 @@
+# AFlow LLM配置
+# 用于执行工作流中的算子调用
+
+models:
+  "gpt-oss-120b":
+    api_type: "openai"
+    base_url: "${OPENAI_BASE_URL}"  # 使用本地vLLM 8002端口
+    api_key: "${OPENAI_API_KEY}"  # vLLM不需要真实key
+    model_name: "${GPT_OSS_MODEL_PATH}"  # vLLM模型路径
+    temperature: 0
+    top_p: 1
+    no_proxy: "localhost,127.0.0.1"  # 绕过代理
+
+  "gpt-4o-mini-remote":
+    api_type: "openai"
+    base_url: "https://api.openai.com/v1"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0
+    top_p: 1
