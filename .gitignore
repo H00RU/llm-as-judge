@@ -1,34 +1,55 @@
-# Secrets and sensitive files
-.env
-*.key
-*.pem
+# ============================================
+# SECURITY: Secrets and sensitive files
+# ============================================
+.env                          # API keys, credentials, local settings
+.env.local                    # Local environment overrides
+*.key                         # Private keys
+*.pem                         # Certificates
+*.cert                        # SSL certificates
 
-# Only ignore aflow_llm.yaml (contains API keys via env variables)
-# training.yaml contains ONLY hyperparameters, NO secrets - should be tracked
+# ============================================
+# SECURITY: Sensitive configuration files
+# ============================================
+# Only aflow_llm.yaml is ignored (contains API keys via env variables)
+# training.yaml and models.yaml are tracked (contain only hyperparameters)
 config/aflow_llm.yaml
 !config/aflow_llm.yaml.example
 
-# Allow tracking training.yaml (contains hyperparameters only)
-# If needed, uncomment the lines below for a .example reference
-# config/training.yaml
-# !config/training.yaml.example
+# ============================================
+# DATA: Training and evaluation datasets
+# ============================================
+# Raw data files - too large to track in git
+*.jsonl                       # JSONL data files
+!data/sample*.jsonl           # Allow sample data for testing
+data/raw/                     # Downloaded raw datasets
+data/processed/               # Processed dataset splits
+data/mixed/                   # Mixed training datasets
+!data/.gitkeep                # Keep directory structure
 
-# Large data files
-*.jsonl
-!data/sample*.jsonl
-data/
-!data/.gitkeep
-checkpoints/
-models/
-!models/.gitkeep
+# ============================================
+# MODELS: Pretrained and fine-tuned models
+# ============================================
+models/                       # Downloaded pretrained models
+!models/.gitkeep              # Keep directory structure
 
-# Logs and temporary files
-logs/
-wandb/
-nohup.out
-*.log
+# ============================================
+# CHECKPOINTS: Training outputs (run-time generated)
+# ============================================
+checkpoints/                  # LoRA checkpoints and model weights
+!checkpoints/.gitkeep         # Keep directory structure
 
-# Python
+# ============================================
+# LOGS: Training and evaluation logs
+# ============================================
+logs/                         # Training logs
+!logs/.gitkeep                # Keep directory structure
+wandb/                        # Weights & Biases experiment logs
+nohup.out                     # Background process output
+*.log                         # General log files
+
+# ============================================
+# PYTHON: Virtual environments and build artifacts
+# ============================================
 __pycache__/
 *.py[cod]
 *$py.class
@@ -50,22 +71,31 @@ wheels/
 .installed.cfg
 *.egg
 
-# Jupyter Notebook
-.ipynb_checkpoints
+# ============================================
+# JUPYTER: Notebook temporary files
+# ============================================
+.ipynb_checkpoints/           # Jupyter cell cache
 
-# Virtual environments
+# ============================================
+# VIRTUALENV: Python virtual environments
+# ============================================
 venv/
 ENV/
 env/
 .venv
 
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# ============================================
+# IDEs: Editor and IDE configuration
+# ============================================
+.vscode/                      # Visual Studio Code
+.idea/                        # JetBrains PyCharm
+*.swp                         # Vim swap files
+*.swo                         # Vim backup files
+*~                            # Vim recovery files
 
-# OS
-.DS_Store
-Thumbs.db
+# ============================================
+# OS: Operating system files
+# ============================================
+.DS_Store                     # macOS
+Thumbs.db                     # Windows
+
