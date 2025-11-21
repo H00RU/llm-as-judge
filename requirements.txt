@@ -16,6 +16,8 @@ wandb==0.17.4
 # Configuration & Data
 pyyaml==6.0.1
 tqdm
+tree-sitter>=0.20.0
+tree-sitter-python>=0.20.0
 
 # Async & HTTP
 aiohttp

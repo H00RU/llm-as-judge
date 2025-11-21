@@ -22,7 +22,7 @@ except ImportError:
     from sympy_code_fixer import SymPyCodeFixer
 
 # 添加AFlow到路径（添加多个可能需要的路径）
-aflow_path = 'os.getenv("AFLOW_PATH", "./AFlow")'
+aflow_path = os.getenv("AFLOW_PATH", "../AFlow")
 sys.path.insert(0, aflow_path)
 sys.path.insert(0, os.path.join(aflow_path, 'workspace'))
 

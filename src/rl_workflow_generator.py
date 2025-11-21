@@ -343,7 +343,7 @@ def test_generator():
     generator = RLWorkflowGenerator(
         base_model="Qwen/Qwen2.5-7B-Instruct",
         device_ids=[2, 3],
-        operator_descriptions_path="os.getenv("AFLOW_PATH", "./AFlow")/workspace/MATH/workflows/template/operator.json"
+        operator_descriptions_path=os.path.join(os.getenv("AFLOW_PATH", "./AFlow"), "workspace/MATH/workflows/template/operator.json")
     )
 
     # 测试问题
