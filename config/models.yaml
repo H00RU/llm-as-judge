@@ -12,7 +12,7 @@ models:
     # 推理配置
     inference:
       max_tokens: 2048
-      temperature: 0.3
+      temperature: 0.2              # ✅ 固定为0.2（与training.yaml一致）
       top_p: 0.95
       top_k: 40
 
@@ -43,7 +43,7 @@ models:
     # 推理配置
     inference:
       max_tokens: 2048
-      temperature: 0.3
+      temperature: 0.2              # ✅ 固定为0.2（与training.yaml一致）
       top_p: 0.95
       top_k: 40
 

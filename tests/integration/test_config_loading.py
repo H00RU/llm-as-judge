@@ -22,18 +22,18 @@ def test_config():
     models = aflow_config.get('models', {})
     print(f"   模型配置数量: {len(models)}")
 
-    if 'gpt-oss-120b' in models:
-        print("   ✅ 找到 gpt-oss-120b 配置")
-        model_cfg = models['gpt-oss-120b']
+    if 'gpt-4o' in models:
+        print("   ✅ 找到 gpt-4o 配置（主执行模型）")
+        model_cfg = models['gpt-4o']
         print(f"      base_url: {model_cfg.get('base_url')}")
         print(f"      model_name: {model_cfg.get('model_name')}")
     else:
-        print("   ❌ 未找到 gpt-oss-120b 配置")
+        print("   ❌ 未找到 gpt-4o 配置")
         print(f"   可用的模型: {list(models.keys())}")
         return False
 
-    if 'gpt-4o-mini' in models:
-        print("   ⚠️  仍然存在 gpt-4o-mini 配置（应该已移除）")
+    if 'gpt-oss-120b' in models:
+        print("   ℹ️  仍保留 gpt-oss-120b 配置（向后兼容）")
 
     # 2. 测试training.yaml
     print("\n2. 测试 config/training.yaml")
@@ -43,10 +43,10 @@ def test_config():
 
     executor_model = training_config.get('aflow_executor_model')
     print(f"   aflow_executor_model: {executor_model}")
-    if executor_model == 'gpt-oss-120b':
-        print("   ✅ 正确配置为 gpt-oss-120b")
+    if executor_model == 'gpt-4o':
+        print("   ✅ 正确配置为 gpt-4o（OpenAI官方API）")
     else:
-        print(f"   ❌ 错误: 应为 gpt-oss-120b，实际为 {executor_model}")
+        print(f"   ❌ 错误: 应为 gpt-4o，实际为 {executor_model}")
         return False
 
     train_dataset = training_config.get('train_dataset')
@@ -75,7 +75,7 @@ def test_config():
     try:
         from scripts.async_llm import LLMsConfig
         llm_configs = LLMsConfig(models)
-        llm_instance = llm_configs.get('gpt-oss-120b')
+        llm_instance = llm_configs.get('gpt-4o')
         print(f"   ✅ LLMsConfig 加载成功")
         print(f"   LLM实例类型: {type(llm_instance).__name__}")
     except Exception as e:

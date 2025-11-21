@@ -2,10 +2,16 @@
 .env
 *.key
 *.pem
+
+# Only ignore aflow_llm.yaml (contains API keys via env variables)
+# training.yaml contains ONLY hyperparameters, NO secrets - should be tracked
 config/aflow_llm.yaml
 !config/aflow_llm.yaml.example
-config/training.yaml
-!config/training.yaml.example
+
+# Allow tracking training.yaml (contains hyperparameters only)
+# If needed, uncomment the lines below for a .example reference
+# config/training.yaml
+# !config/training.yaml.example
 
 # Large data files
 *.jsonl
