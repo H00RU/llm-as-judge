@@ -63,8 +63,27 @@ class DataManager:
                 for line in f:
                     if line.strip():
                         sample = json.loads(line)
-                        problem_type = sample.get("problem_type", "math")
-                        data_by_type[problem_type].append(sample)
+
+                        # 字段映射：将混合数据集格式转换为GRPO训练器期望格式
+                        mapped_sample = {
+                            "id": sample.get("id", ""),
+                            "problem": sample.get("question", ""),  # question -> problem
+                            "ground_truth": sample.get("reference_answer", ""),  # reference_answer -> ground_truth
+                            "problem_type": sample.get("domain", "math"),  # domain -> problem_type
+                            "dataset": sample.get("dataset", ""),
+                            "answer_type": sample.get("answer_type", "text"),
+                            "metadata": sample.get("metadata", {})
+                        }
+
+                        # 特殊处理：为代码类型添加额外字段
+                        if mapped_sample["problem_type"] == "code":
+                            if "entry_point" in sample:
+                                mapped_sample["entry_point"] = sample["entry_point"]
+                            if "test" in sample:
+                                mapped_sample["test"] = sample["test"]
+
+                        problem_type = mapped_sample["problem_type"]
+                        data_by_type[problem_type].append(mapped_sample)
 
         # 打乱
         if self.shuffle:

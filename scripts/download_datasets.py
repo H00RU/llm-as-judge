@@ -41,15 +41,22 @@ class DatasetDownloader:
         """下载MATH"""
         print("\n📥 下载 MATH...")
         try:
-            dataset = load_dataset("hendrycks/competition_math")
+            # 使用qwedsacf镜像（原始hendrycks/competition_math不可用）
+            dataset = load_dataset("qwedsacf/competition_math")
+
+            if "train" in dataset:
+                data = dataset["train"]
+            else:
+                available_splits = list(dataset.keys())
+                data = dataset[available_splits[0]]
 
             output_path = self.output_dir / "math" / "math.jsonl"
             with open(output_path, "w") as f:
-                for item in dataset["train"]:
+                for item in data:
                     f.write(json.dumps(item) + "\n")
 
-            print(f"  ✅ MATH: {len(dataset['train'])} samples")
-            return len(dataset['train'])
+            print(f"  ✅ MATH: {len(data)} samples")
+            return len(data)
         except Exception as e:
             print(f"  ❌ MATH 下载失败: {e}")
             return 0

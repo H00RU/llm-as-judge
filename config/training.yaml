@@ -18,7 +18,7 @@ rollout_batch_size: 4                 # ✅ 用户需求：4 samples per step
 num_return_sequences_in_group: 6      # ✅ 用户需求：6 workflows per problem (GRPO组)
 
 # Learning & Optimization
-learning_rate: 1e-4
+learning_rate: 0.0001
 warmup_steps: 50
 gradient_accumulation_steps: 1
 clip_range: 0.2
@@ -56,7 +56,7 @@ lora_target_modules: "q_proj,v_proj,up_proj,down_proj"
 # ============================================
 # Data Configuration
 # ============================================
-data_dir: "data/mixed"      # 混合数据集路径
+data_dir: "data"      # 数据根目录，DataManager会自动查找mixed/{split}_mixed.jsonl
 train_dataset: "data/mixed/train_mixed.jsonl"
 val_dataset: "data/mixed/test_mixed.jsonl"
 
