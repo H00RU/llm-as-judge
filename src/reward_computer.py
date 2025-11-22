@@ -3,11 +3,12 @@
 奖励计算器 - 改进版(借鉴ROLL和AgentFlow设计)
 """
 import sys
+import os
 import re
 from typing import Any, Dict, Optional
 
 # 添加AFlow到路径
-sys.path.insert(0, 'os.getenv("AFLOW_PATH", "./AFlow")')
+sys.path.insert(0, os.getenv("AFLOW_PATH", "./AFlow"))
 
 # 导入答案提取器
 try:

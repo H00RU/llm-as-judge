@@ -263,6 +263,7 @@ class DatasetProcessor:
                         "question": item.get("prompt", ""),
                         "reference_answer": item.get("canonical_solution", ""),
                         "answer_type": "code",
+                        "entry_point": item.get("entry_point", ""),  # ✅ 保留entry_point
                         "metadata": {
                             "source": "humaneval",
                             "original_id": str(item.get("task_id", idx))
@@ -309,6 +310,13 @@ class DatasetProcessor:
             for idx, line in enumerate(f):
                 try:
                     item = json.loads(line)
+
+                    # 从code中提取函数名作为entry_point
+                    code = item.get("code", "")
+                    import re as regex_module
+                    match = regex_module.search(r'def\s+(\w+)\s*\(', code)
+                    entry_point = match.group(1) if match else f"func_{idx}"
+
                     sample = {
                         "id": f"mbpp_{idx}",
                         "dataset": "mbpp",
@@ -316,6 +324,7 @@ class DatasetProcessor:
                         "question": item.get("text", ""),
                         "reference_answer": item.get("code", ""),
                         "answer_type": "code",
+                        "entry_point": entry_point,  # ✅ 从code提取函数名
                         "metadata": {
                             "source": "mbpp",
                             "original_id": str(item.get("task_id", idx))

@@ -58,7 +58,7 @@ lora_target_modules: "q_proj,v_proj,up_proj,down_proj"
 # ============================================
 data_dir: "data"      # 数据根目录，DataManager会自动查找mixed/{split}_mixed.jsonl
 train_dataset: "data/mixed/train_mixed.jsonl"
-val_dataset: "data/mixed/test_mixed.jsonl"
+test_dataset: "data/mixed/test_mixed.jsonl"
 
 # 域级别权重（来自dataset.yaml）
 domain_ratios:
