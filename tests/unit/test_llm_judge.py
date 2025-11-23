@@ -3,7 +3,7 @@
 测试LLM Judge功能
 """
 import sys
-sys.path.insert(0, './
+sys.path.insert(0, 'src')
 
 from reward_computer import RewardComputer
 
@@ -20,7 +20,7 @@ def test_llm_judge():
         llm_config={
             "base_url": "http://localhost:8002/v1",
             "api_key": "sk-dummy",
-            "model_name": "./"  # 完整模型路径
+            "model_name": "qwen2.5-7b-local"  # 完整模型路径
         }
     )
 

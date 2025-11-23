@@ -4,9 +4,10 @@
 """
 import json
 import sys
+import os
 
 # Add AFlow to path
-sys.path.insert(0, 'os.getenv("AFLOW_PATH", "./AFlow")')
+sys.path.insert(0, os.getenv("AFLOW_PATH", "./AFlow"))
 
 from scripts import operators as operator_module
 

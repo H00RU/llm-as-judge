@@ -12,8 +12,8 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 os.environ['NO_PROXY'] = 'localhost,127.0.0.1'
 os.environ['no_proxy'] = 'localhost,127.0.0.1'
 
-sys.path.insert(0, './
-sys.path.insert(0, 'os.getenv("AFLOW_PATH", "./AFlow")')
+sys.path.insert(0, 'src')
+sys.path.insert(0, os.getenv("AFLOW_PATH", "./AFlow"))
 
 def test_training_step():
     print("=" * 60)
@@ -34,7 +34,7 @@ def test_training_step():
     # 2. 加载配置
     print("\n2. 加载配置...")
     try:
-        config_path = './
+        config_path = './config/training.yaml'
         with open(config_path, 'r') as f:
             config = yaml.safe_load(f)
         print(f"   ✅ 配置加载成功")

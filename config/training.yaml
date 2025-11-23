@@ -74,11 +74,11 @@ reward_weights:
   efficiency: 0.2           # 效率权重
   code_quality: 0.1         # 代码质量权重
 
-# 验证集评估
-eval_every: 10              # 每10步验证一次
-val_samples: 50             # 每次验证50个样本
-log_every: 5                # 每5步日志一次
-save_every: 50              # 每50步保存一次检查点
+# 评估策略（无验证集设计）
+eval_every: 0               # 禁用在线测试集评估（避免测试集泄露）
+val_samples: 50             # 保留参数（最后手动评估时使用）
+log_every: 5                # 每5步记录训练指标
+save_every: 50              # 每50步保存checkpoint（用于最后选择最佳模型）
 
 # ============================================
 # Checkpointing & Output

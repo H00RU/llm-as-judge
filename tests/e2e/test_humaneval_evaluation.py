@@ -5,9 +5,10 @@
 import asyncio
 import json
 import sys
+import os
 
 # Add AFlow to path
-sys.path.insert(0, 'os.getenv("AFLOW_PATH", "./AFlow")')
+sys.path.insert(0, os.getenv("AFLOW_PATH", "./AFlow"))
 
 from scripts.async_llm import create_llm_instance, LLMsConfig
 from scripts import operators as operator_module

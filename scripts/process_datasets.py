@@ -264,6 +264,7 @@ class DatasetProcessor:
                         "reference_answer": item.get("canonical_solution", ""),
                         "answer_type": "code",
                         "entry_point": item.get("entry_point", ""),  # ✅ 保留entry_point
+                        "test": item.get("test", ""),  # ✅ 保留test字段（关键！）
                         "metadata": {
                             "source": "humaneval",
                             "original_id": str(item.get("task_id", idx))
@@ -317,6 +318,19 @@ class DatasetProcessor:
                     match = regex_module.search(r'def\s+(\w+)\s*\(', code)
                     entry_point = match.group(1) if match else f"func_{idx}"
 
+                    # 处理测试用例（test_list转换为test字符串）
+                    test_list = item.get("test_list", [])
+                    if test_list:
+                        # 合并多个测试用例为一个测试函数
+                        test_code = f"def check(candidate):\n"
+                        for test_case in test_list:
+                            # 每个test_case是一个assert语句，需要将函数名替换为candidate
+                            test_case = test_case.replace(entry_point, "candidate")
+                            test_code += f"    {test_case}\n"
+                        test = test_code
+                    else:
+                        test = ""
+
                     sample = {
                         "id": f"mbpp_{idx}",
                         "dataset": "mbpp",
@@ -325,6 +339,7 @@ class DatasetProcessor:
                         "reference_answer": item.get("code", ""),
                         "answer_type": "code",
                         "entry_point": entry_point,  # ✅ 从code提取函数名
+                        "test": test,  # ✅ 保留test字段（转换后的测试函数）
                         "metadata": {
                             "source": "mbpp",
                             "original_id": str(item.get("task_id", idx))

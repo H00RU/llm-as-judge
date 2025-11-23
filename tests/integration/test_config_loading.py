@@ -3,10 +3,11 @@
 测试配置是否正确加载
 """
 import sys
+import os
 import yaml
 from pathlib import Path
 
-sys.path.insert(0, 'os.getenv("AFLOW_PATH", "./AFlow")')
+sys.path.insert(0, os.getenv("AFLOW_PATH", "./AFlow"))
 
 def test_config():
     print("=" * 60)
@@ -15,7 +16,7 @@ def test_config():
 
     # 1. 测试aflow_llm.yaml
     print("\n1. 测试 config/aflow_llm.yaml")
-    config_path = Path('./
+    config_path = Path('./config/aflow_llm.yaml')
     with open(config_path, 'r') as f:
         aflow_config = yaml.safe_load(f)
 
@@ -37,7 +38,7 @@ def test_config():
 
     # 2. 测试training.yaml
     print("\n2. 测试 config/training.yaml")
-    training_config_path = Path('./
+    training_config_path = Path('./config/training.yaml')
     with open(training_config_path, 'r') as f:
         training_config = yaml.safe_load(f)
 
@@ -50,24 +51,24 @@ def test_config():
         return False
 
     train_dataset = training_config.get('train_dataset')
-    val_dataset = training_config.get('val_dataset')
+    test_dataset = training_config.get('test_dataset')
     print(f"   train_dataset: {train_dataset}")
-    print(f"   val_dataset: {val_dataset}")
+    print(f"   test_dataset: {test_dataset}")
 
     # 检查数据集文件
-    train_path = Path('./
-    val_path = Path('./
+    train_path = Path(train_dataset) if train_dataset else None
+    test_path = Path(test_dataset) if test_dataset else None
 
-    if train_path.exists():
+    if train_path and train_path.exists():
         print(f"   ✅ 训练集文件存在: {train_path}")
     else:
         print(f"   ❌ 训练集文件不存在: {train_path}")
         return False
 
-    if val_path.exists():
-        print(f"   ✅ 验证集文件存在: {val_path}")
+    if test_path and test_path.exists():
+        print(f"   ✅ 测试集文件存在: {test_path}")
     else:
-        print(f"   ❌ 验证集文件不存在: {val_path}")
+        print(f"   ❌ 测试集文件不存在: {test_path}")
         return False
 
     # 3. 测试LLM配置加载
