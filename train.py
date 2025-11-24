@@ -13,6 +13,7 @@ import yaml
 sys.path.insert(0, 'src')
 
 from grpo_trainer import GRPOTrainer
+from scripts.setup_data_paths import DataPathSetup
 
 
 async def main():
@@ -54,6 +55,11 @@ async def main():
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
     """)
+
+    # 自动配置数据路径映射（确保测试数据可访问）
+    print("\n📋 准备数据环境...")
+    data_setup = DataPathSetup()
+    data_setup.run_all(force=False)
 
     # 创建训练器
     trainer = GRPOTrainer(

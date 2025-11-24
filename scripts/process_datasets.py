@@ -14,6 +14,13 @@ import random
 from pathlib import Path
 from typing import Dict, List, Any
 
+# 固定随机种子，确保数据分割的可重复性
+RANDOM_SEED = 42
+random.seed(RANDOM_SEED)
+
+print(f"✅ 随机种子已固定为: {RANDOM_SEED} (确保数据分割可重复)")
+print("=" * 80)
+
 class DatasetProcessor:
     """数据集统一处理器"""
 
@@ -546,7 +553,15 @@ class DatasetProcessor:
 
                 with open(test_file) as f:
                     count = sum(1 for _ in f)
-                test_index[dataset_name] = str(output_file.relative_to(Path.cwd()))
+
+                # 处理路径：先尝试相对路径，失败则使用绝对路径
+                try:
+                    rel_path = output_file.relative_to(Path.cwd())
+                    test_index[dataset_name] = str(rel_path)
+                except ValueError:
+                    # 如果不在当前工作目录下，直接使用输出文件的路径字符串
+                    test_index[dataset_name] = str(output_file.relative_to(test_dir.parent))
+
                 print(f"  ✅ {dataset_name}_test.jsonl: {count} 样本")
 
         with open(test_dir / "test_index.json", "w") as f:

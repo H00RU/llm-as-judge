@@ -818,7 +818,7 @@ class GRPOTrainer:
                 wandb.log(metrics, step=step)
 
             # 🧪 验证集评估（每N步）
-            if step % eval_every == 0:
+            if eval_every > 0 and step % eval_every == 0:
                 val_metrics = await self.evaluate_on_val_set(num_samples=val_samples)
 
                 # 合并验证指标到训练指标
